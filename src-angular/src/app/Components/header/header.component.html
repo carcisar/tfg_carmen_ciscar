@@ -1,0 +1,37 @@
+<header>
+  <div class="bg-white flex justify-between items-center p-3 border-b border-gray-200">
+    <div>
+      <a routerLink="/"><img src="assets/img/LogoPlanazoAzulconLetrasRosa.png" alt="Logo" class="logo"></a>
+    </div>
+    <div>
+      <ng-container *ngIf="!isAuthenticated; else loggedIn">
+        <a routerLink="/login" class="menu-link px-3 text-sm">Login</a>
+        <a routerLink="/registro" class="menu-link px-3 text-sm">Registro</a>
+      </ng-container>
+      <ng-template #loggedIn>
+        <ng-container *ngIf="isAdmin; else userMenu">
+          <a routerLink="/actividades" class="menu-link px-3">Actividades</a>
+          <a routerLink="/nuevaActividad" class="menu-link px-3">Nueva Actividad</a>
+          <a routerLink="/usuarios" class="menu-link px-3">Usuarios</a>
+          <a (click)="onLogoutClicked()" class="button_dark px-3">Logout</a>
+        </ng-container>
+        <ng-template #userMenu>
+          <a routerLink="/mis-datos" class="menu-link px-3">Mis datos</a>
+          <a routerLink="/mis-planes" class="menu-link px-3">Mis Planes</a>
+          <a routerLink="/actividades" class="menu-link px-3">Actividades</a>
+          <a routerLink="/mis-opiniones" class="menu-link px-3">Mis Opiniones</a>
+          <a (click)="onLogoutClicked()" class="button_dark px-3">Logout</a>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+  <div class="bg-primaryt text-secondaryt p-4">
+    <div class="container mx-auto">
+      <ng-container *ngIf="isAuthenticated">
+        <div class="text-right">
+          Bienvenid&#64;, {{ usuario.nombreUsuario }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</header>

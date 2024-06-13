@@ -1,0 +1,49 @@
+<section class="relative text-gray-600 body-font h-[75vh]">
+  <div class="imagenFondo absolute inset-0 bg-cover bg-center" style="background-image: url('assets/img/venice-2647436_1280.jpg');">
+    <div class="container mx-auto flex flex-col justify-center items-center px-5 py-24 relative z-10 h-full">
+      <div class="w-full md:w-2/3 flex flex-col items-center text-center mb-16">
+        <h1 class="title-font sm:text-4xl text-3xl font-medium text-textoLight mb-10" style="text-shadow: 0px 4px 14px rgb(0, 0, 0);">
+          INTRODUCE TU DESTINO
+        </h1>
+        <form (ngSubmit)="buscarDestino()" class="w-full flex flex-col justify-center items-center">
+          <div class="relative w-full lg:w-3/4 xl:w-1/2 text-left">
+            <input type="text" id="hero-field" name="hero-field" [(ngModel)]="destinoBuscado" placeholder="Escribe aquí..."
+              class="w-full bg-fondot rounded focus:ring-2 focus:ring-indigo-200 border border-primaryt focus:border-primaryt text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          </div>
+          <button type="submit" class="button_dark inline-flex text-primaryt text-lg mt-6">BUSCAR</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 pt-10 mx-auto">
+    <div class="flex flex-col text-center w-full ">
+      <h1 class="sm:text-5xl text-10xl font-semibold title-font mb-3 text-gray-900">Algunos destinos populares</h1>
+      <h3 class="lg:w-2/3 mx-auto leading-relaxed text-base mb-3 py-5">Te sugerimos algunos destinos para que tus
+        proximas
+        vacaciones elijas que hacer, antes que donde ir</h3>
+    </div>
+  </div>
+</section>
+
+<hr style="width: 50%; margin: 0 auto;">
+
+<!-- Componente Inicio -->
+<section class="container mx-auto p-5">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div *ngFor="let destino of destinos" class="overflow-hidden rounded-lg shadow-lg">
+      <img [src]="destino.imagen" alt="{{ destino.nombre }}" class="w-full h-48 object-cover">
+      <div class="p-4 bg-white">
+        <h2 class="text-xl font-semibold mb-2">{{ destino.nombre }}</h2>
+        <a [href]="destino.path" class="inline-block">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            SABER MÁS
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
