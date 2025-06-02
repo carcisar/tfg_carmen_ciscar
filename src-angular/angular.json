@@ -41,6 +41,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/carcisar/",
               "budgets": [
                 {
                   "type": "initial",
