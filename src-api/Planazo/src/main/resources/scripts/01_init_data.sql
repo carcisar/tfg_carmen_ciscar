@@ -3,17 +3,18 @@
 -- CREATE DATABASE IF NOT EXISTS Planazo;
 -- USE Planazo;
 
-INSERT INTO USUARIO (Nombre, Email, Password) VALUES
-('María Jiménez', 'mariajimenez@gmail.com', 'maria1234'),
-('Juan Pérez', 'juanperez@gmail.com', 'juan1234'),
-('Ana López', 'analopez@gmail.com', 'ana1234'),
-('Roberto García', 'robertogarcia@gmail.com', 'roberto1234'),
-('Laura Martínez', 'lauramartinez@gmail.com', 'laura1234'),
-('Carlos Hernández', 'carloshernandez@gmail.com', 'carlos1234'),
-('Patricia González', 'patriciagonzalez@gmail.com', 'patricia1234'),
-('Fernando Álvarez', 'fernandoalvarez@gmail.com', 'fernando1234'),
-('Carmen Ruiz', 'carmenruiz@gmail.com', 'carmen1234'),
-('Sergio Moreno', 'sergiomoreno@gmail.com', 'sergio1234');
+INSERT INTO USUARIO (nombre, apellido, email, password) VALUES
+  ('María', 'Jiménez',      'mariajimenez@gmail.com',   'maria1234'),
+  ('Juan',  'Pérez',        'juanperez@gmail.com',      'juan1234'),
+  ('Ana',   'López',        'analopez@gmail.com',       'ana1234'),
+  ('Roberto','García',      'robertogarcia@gmail.com',  'roberto1234'),
+  ('Laura', 'Martínez',     'lauramartinez@gmail.com',  'laura1234'),
+  ('Carlos','Hernández',    'carloshernandez@gmail.com','carlos1234'),
+  ('Patricia','González',   'patriciagonzalez@gmail.com','patricia1234'),
+  ('Fernando','Álvarez',    'fernandoalvarez@gmail.com','fernando1234'),
+  ('Carmen','Ruiz',         'carmenruiz@gmail.com',     'carmen1234'),
+  ('Sergio','Moreno',       'sergiomoreno@gmail.com',   'sergio1234');
+
 
 INSERT INTO USUARIO_ROL (Usuario_id, Rol) VALUES
 (1, 'ROL_ADMIN'),
