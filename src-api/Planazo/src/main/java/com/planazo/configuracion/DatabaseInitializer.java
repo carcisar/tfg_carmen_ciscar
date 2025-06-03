@@ -12,17 +12,18 @@ import javax.sql.DataSource;
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public DatabaseInitializer(DataSource ds) { this.dataSource = ds; }
 
     @Override
     public void run(String... args) throws Exception {
         Resource resource = new ClassPathResource("scripts/01_init_data.sql");
-        ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator(resource);
-        try {
-            databasePopulator.execute(dataSource);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
+
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(resource);
+        populator.setContinueOnError(false);      
+        populator.setSqlScriptEncoding("UTF-8"); 
+        populator.execute(dataSource);
     }
 }
