@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Destino } from '../models/destino.model';
 import { Actividad } from '../models/actividad.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DestinoService {
-  private apiUrl = 'http://localhost:8081/api/destinos';
+  // private apiUrl = 'http://localhost:8081/api/destinos';
+  private apiUrl = `${environment.apiUrl}/api/destinos`;
 
   constructor(private http: HttpClient) {}
 

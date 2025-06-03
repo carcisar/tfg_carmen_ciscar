@@ -4,13 +4,15 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { Actividad } from '../models/actividad.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8081/api/usuarios/';
+  // private apiUrl = 'http://localhost:8081/api/usuarios/';
+   private apiUrl = `${environment.apiUrl}/api/usuarios`;
 
   constructor(private http: HttpClient, private router: Router) { }
 

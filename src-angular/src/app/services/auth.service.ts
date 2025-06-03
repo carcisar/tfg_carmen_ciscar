@@ -6,6 +6,7 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,16 @@ export class AuthService {
   usuario$ = this.usuarioSubject.asObservable();
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isTokenInLocalStorage());
 
-  private apiUrl = 'http://localhost:8081/authenticate/signin';
-  private apiUrlSignup = 'http://localhost:8081/authenticate/signup';
-  private userDetailsUrl = 'http://localhost:8081/api/usuarios/detalles';
+  // private apiUrl = 'http://localhost:8081/authenticate/signin';
+  // private apiUrlSignup = 'http://localhost:8081/authenticate/signup';
+  // private userDetailsUrl = 'http://localhost:8081/api/usuarios/detalles';
 
-  constructor(private http: HttpClient, private tokenService: TokenService, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+  private apiUrl = `${environment.apiUrl}/authenticate/signin`;
+  private apiUrlSignup = `${environment.apiUrl}/authenticate/signup`;
+  private userDetailsUrl = `${environment.apiUrl}/api/usuarios/detalles`;
+
+
+  constructor(private http: HttpClient, private tokenService: TokenService, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   get authenticationState(): Observable<boolean> {
     return this.isAuthenticatedSubject.asObservable();
