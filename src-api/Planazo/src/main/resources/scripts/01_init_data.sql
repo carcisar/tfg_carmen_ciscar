@@ -28,18 +28,17 @@ INSERT INTO USUARIO_ROL (Usuario_id, Rol) VALUES
 (10, 'ROL_USER');
 
 INSERT INTO DESTINO (Nombre, Imagen) VALUES
-('Almería', 'URL_IMAGEN_ALMERIA'),
-('Cádiz', 'URL_IMAGEN_CADIZ'),
-('Córdoba', 'URL_IMAGEN_CORDOBA'),
-('Granada', 'URL_IMAGEN_GRANADA'),
-('Huelva', 'URL_IMAGEN_HUELVA'),
-('Jaén', 'URL_IMAGEN_JAEN'),
-('Málaga', 'URL_IMAGEN_MALAGA'),
-('Sevilla', 'URL_IMAGEN_SEVILLA');
-
+('Almería', 'assets/destinos/01.jpg'),
+('Cádiz', 'assets/destinos/02.jpg'),
+('Córdoba', 'assets/destinos/03.jpg'),
+('Granada', 'assets/destinos/04.jpg'),
+('Huelva', 'assets/destinos/05.jpg'),
+('Jaén', 'assets/destinos/06.jpg'),
+('Málaga', 'assets/destinos/07.jpg'),
+('Sevilla', 'assets/destinos/08.jpg');
 
 INSERT INTO ACTIVIDAD (Nombre, Descripcion, Categoria, Puntuacion, Direccion, Horario, Imagen, Destino_id) VALUES
-('Visita al Parque Natural Cabo de Gata-Níjar', 'Explora la belleza natural del Cabo de Gata, sus playas y paisajes volcánicos.', 'NATURALEZA', 2.3, 'Cabo de Gata, Almería', 'Todo el día', 'URL_IMAGEN_CABO_GATA', 1),
+('Visita al Parque Natural Cabo de Gata-Níjar', 'Explora la belleza natural del Cabo de Gata, sus playas y paisajes volcánicos.', 'NATURALEZA', 2.3, 'Cabo de Gata, Almería', 'Todo el día', 'assets/actividades/01/03.jpg', 1),
 ('Tour por el Conjunto Monumental de la Alcazaba', 'Descubre la historia de Almería a través de su impresionante fortaleza musulmana.', 'CULTURA', 3.4, 'Alcazaba, Almería', '09:00-18:00', 'URL_IMAGEN_ALCAZABA', 1),
 ('Degustación de tapas en la capital', 'Saborea las mejores tapas almerienses en un tour gastronómico por la ciudad.', 'GASTRONOMÍA', 5.0, 'Centro de Almería', '12:00-16:00, 20:00-24:00', 'URL_IMAGEN_TAPAS_ALMERIA', 1),
 ('Rutas de senderismo en Sierra de los Filabres', 'Disfruta de la naturaleza y el ejercicio con rutas de senderismo por la Sierra de los Filabres.', 'DEPORTE', 5.0, 'Sierra de los Filabres, Almería', 'Todo el día', 'URL_IMAGEN_SIERRA_FILABRES', 1),
