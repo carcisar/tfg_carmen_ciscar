@@ -8,17 +8,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	//Cors para Angular
+    // CORS para Angular (tanto en dev como en prod)
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Esto aplica a todas las rutas
-                .allowedOrigins("http://localhost:4200") // Orígenes permitidos
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
-                .allowedHeaders("*") // Cabeceras permitidas
-                .allowCredentials(true); // Permitir credenciales
+        registry.addMapping("/**") // aplica a todas las rutas
+                // permite localhost:4200 (desarrollo) y planazo-front.onrender.com (producción)
+                .allowedOrigins(
+                    "http://localhost:4200",
+                    "https://planazo-front.onrender.com"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
     
- // Configuración para servir archivos estáticos
+    // Configuración para servir archivos estáticos (no cambia)
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**")

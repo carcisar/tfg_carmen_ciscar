@@ -45,7 +45,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
+		http.cors().and().csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
 				
 				.requestMatchers("/api/usuarios/detalles").authenticated()
 				.requestMatchers("/files/**").permitAll()

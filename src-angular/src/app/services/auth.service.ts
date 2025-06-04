@@ -13,9 +13,9 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
 
-  public usuarioSubject = new BehaviorSubject<Usuario | null>(this.getUsuarioFromLocalStorage());
+  public usuarioSubject = new BehaviorSubject<Usuario | null>(this.getUsuarioFromStorage());
   usuario$ = this.usuarioSubject.asObservable();
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isTokenInLocalStorage());
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isTokenInStorage());
 
   // private apiUrl = 'http://localhost:8081/authenticate/signin';
   // private apiUrlSignup = 'http://localhost:8081/authenticate/signup';
@@ -40,20 +40,33 @@ export class AuthService {
     return null;
   }
 
-  private isTokenInLocalStorage(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      return !!sessionStorage.getItem('token');
-    }
-    return false;
+   private isTokenInStorage(): boolean {
+    return isPlatformBrowser(this.platformId) && !!localStorage.getItem('token');
   }
 
-  private getUsuarioFromLocalStorage(): Usuario | null {
+
+  private getUsuarioFromStorage(): Usuario | null {
     if (isPlatformBrowser(this.platformId)) {
-      const user = sessionStorage.getItem('usuario');
-      return user ? JSON.parse(user) : null;
+      const u = localStorage.getItem('usuario');
+      return u ? JSON.parse(u) : null;
     }
     return null;
   }
+
+  // private isTokenInLocalStorage(): boolean {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     return !!sessionStorage.getItem('token');
+  //   }
+  //   return false;
+  // }
+
+  // private getUsuarioFromLocalStorage(): Usuario | null {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     const user = sessionStorage.getItem('usuario');
+  //     return user ? JSON.parse(user) : null;
+  //   }
+  //   return null;
+  // }
 
   private saveUsuarioToLocalStorage(usuario: Usuario) {
     if (isPlatformBrowser(this.platformId)) {
@@ -69,22 +82,39 @@ export class AuthService {
     }
   }
 
+  // login(user: { email: string; password: string }): Observable<{ token: string; roles: string[] }> {
+  //   return this.http.post<any>(this.apiUrl, user).pipe(
+  //     map((response: { token: string; roles: string[] }) => {
+  //       if (response && response.token && response.roles) {
+  //         this.tokenService.setUserDetails(response.token, response.roles);
+  //         if (isPlatformBrowser(this.platformId)) {
+  //           localStorage.setItem('token', response.token); // Asegúrate de que el token se guarde en localStorage
+  //         }
+  //         this.isAuthenticatedSubject.next(true);
+  //         this.updateUsuarioFromToken();
+  //         return response;
+  //       } else {
+  //         throw new Error('Token o roles no presentes en la respuesta');
+  //       }
+  //     }),
+  //     catchError(error => this.handleErrorLogin(error))
+  //   );
+  // }
+
   login(user: { email: string; password: string }): Observable<{ token: string; roles: string[] }> {
     return this.http.post<any>(this.apiUrl, user).pipe(
-      map((response: { token: string; roles: string[] }) => {
-        if (response && response.token && response.roles) {
-          this.tokenService.setUserDetails(response.token, response.roles);
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('token', response.token); // Asegúrate de que el token se guarde en localStorage
-          }
+      map(resp => {
+        if (resp.token && resp.roles) {
+          localStorage.setItem('token', resp.token);
+          this.tokenService.setUserDetails(resp.token, resp.roles);
           this.isAuthenticatedSubject.next(true);
           this.updateUsuarioFromToken();
-          return response;
+          return resp;
         } else {
-          throw new Error('Token o roles no presentes en la respuesta');
+          throw new Error('Respuesta inválida de login');
         }
       }),
-      catchError(error => this.handleErrorLogin(error))
+      catchError(err => this.handleErrorLogin(err))
     );
   }
 
@@ -99,16 +129,27 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = this.tokenService.getToken();
-    const isAuthenticated = token !== null;
-    if (isAuthenticated !== this.isAuthenticatedSubject.getValue()) {
-      this.isAuthenticatedSubject.next(isAuthenticated);
-      if (isAuthenticated) {
+    const has = this.isTokenInStorage();
+    if (has !== this.isAuthenticatedSubject.getValue()) {
+      this.isAuthenticatedSubject.next(has);
+      if (has) {
         this.updateUsuarioFromToken();
       }
     }
-    return isAuthenticated;
+    return has;
   }
+
+  // isAuthenticated(): boolean {
+  //   const token = this.tokenService.getToken();
+  //   const isAuthenticated = token !== null;
+  //   if (isAuthenticated !== this.isAuthenticatedSubject.getValue()) {
+  //     this.isAuthenticatedSubject.next(isAuthenticated);
+  //     if (isAuthenticated) {
+  //       this.updateUsuarioFromToken();
+  //     }
+  //   }
+  //   return isAuthenticated;
+  // }
 
   hasRole(role: string): boolean {
     let roles = this.tokenService.getRoles();
@@ -116,10 +157,20 @@ export class AuthService {
     return roles ? roles.includes(role) : false;
   }
 
+  // logout() {
+  //   this.tokenService.removeUserDetails();
+  //   this.isAuthenticatedSubject.next(false);
+  //   this.removeUsuarioFromLocalStorage();
+  //   this.router.navigate(['/']);
+  // }
+
+
   logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('usuarioId');
     this.tokenService.removeUserDetails();
     this.isAuthenticatedSubject.next(false);
-    this.removeUsuarioFromLocalStorage();
     this.router.navigate(['/']);
   }
 
@@ -147,30 +198,46 @@ export class AuthService {
     }
   }
 
-  private updateUsuarioFromToken() {
+   private updateUsuarioFromToken() {
     const email = this.tokenService.getUserEmail();
-    if (email) {
-      console.log('Email obtenido del token:', email);
-      this.getUserDetails(email).subscribe(
-        (user: any) => {
-          const usuario: Usuario = {
-            id: user.id,
-            nombreUsuario: user.nombreUsuario,
-            apellidoUsuario: user.apellidoUsuario,
-            email: user.email,
-            password: user.password,
-            roles: user.roles
-          };
-          console.log('Usuario obtenido del backend:', usuario);
+    if (!email) return;
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.get<Usuario>(`${environment.apiUrl}/api/usuarios/detalles?email=${email}`, { headers })
+      .subscribe(
+        usuario => {
+          localStorage.setItem('usuario', JSON.stringify(usuario));
+          localStorage.setItem('usuarioId', usuario.id.toString());
           this.usuarioSubject.next(usuario);
-          this.saveUsuarioToLocalStorage(usuario);
         },
-        (error) => {
-          console.error('Error al obtener los detalles del usuario:', error);
-        }
+        e => console.error('Error al traer usuario:', e)
       );
-    }
   }
+
+  // private updateUsuarioFromToken() {
+  //   const email = this.tokenService.getUserEmail();
+  //   if (email) {
+  //     console.log('Email obtenido del token:', email);
+  //     this.getUserDetails(email).subscribe(
+  //       (user: any) => {
+  //         const usuario: Usuario = {
+  //           id: user.id,
+  //           nombreUsuario: user.nombreUsuario,
+  //           apellidoUsuario: user.apellidoUsuario,
+  //           email: user.email,
+  //           password: user.password,
+  //           roles: user.roles
+  //         };
+  //         console.log('Usuario obtenido del backend:', usuario);
+  //         this.usuarioSubject.next(usuario);
+  //         this.saveUsuarioToLocalStorage(usuario);
+  //       },
+  //       (error) => {
+  //         console.error('Error al obtener los detalles del usuario:', error);
+  //       }
+  //     );
+  //   }
+  // }
 
   getUserDetails(email: string): Observable<Usuario> {
     const token = this.tokenService.getToken();
